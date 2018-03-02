@@ -25,24 +25,18 @@ class WithDecorator extends Component {
     foo: PropTypes.string
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   formatPropsForDisplay() {
-  	const propsArr = [];
-  	for (let [key, val] of Object.entries(this.props)) {
-  		propsArr.push(`${ key }=${ val }`);
-  	}
-
-  	return propsArr.join(', ');
+  	return Object.entries(this.props).map(([key, val]) => <li>{ `${ key }="${ val }"` }</li>);
   }
 
   render() {
     return (
       <div { ...this.props } >
         <h2>{ this.constructor.name }</h2>
-        <p>Props: { this.formatPropsForDisplay() }</p>
+        <h3>Props:</h3>
+        <ul>
+        	{ this.formatPropsForDisplay() }
+        </ul>
       </div>
     );
   }
