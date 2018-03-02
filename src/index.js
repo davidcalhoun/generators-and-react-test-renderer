@@ -5,10 +5,12 @@ import renderer from 'react-test-renderer';
 
 const Webdriver = target => {
   target.defaultProps = {
+  	...target.defaultProps,
     'data-webdriver': target.name
   };
 
   target.propTypes = {
+  	...target.propTypes,
     'data-webdriver': PropTypes.string
   };
 };
@@ -16,41 +18,39 @@ const Webdriver = target => {
 @Webdriver
 class WithDecorator extends Component {
   static defaultProps = {
-    'data-test': 'testing 123'
+  	foo: 'bar'
   }
 
   static propTypes = {
-    'data-test': PropTypes.string
+    foo: PropTypes.string
+  }
+
+  constructor(props) {
+    super(props);
+  }
+
+  formatPropsForDisplay() {
+  	const propsArr = [];
+  	for (let [key, val] of Object.entries(this.props)) {
+  		propsArr.push(`${ key }=${ val }`);
+  	}
+
+  	return propsArr.join(', ');
   }
 
   render() {
     return (
-      <div { ...this.props } />
+      <div { ...this.props } >
+        <h2>{ this.constructor.name }</h2>
+        <p>Props: { this.formatPropsForDisplay() }</p>
+      </div>
     );
   }
 };
-
-class WithoutDecorator extends Component {
-  static defaultProps = {
-    'data-test': 'testing 123'
-  }
-
-  static propTypes = {
-    'data-test': PropTypes.string
-  }
-
-  render() {
-    return (
-      <div { ...this.props } />
-    );
-  }
-};
-
 
 const App = () => (
 	<div>
 		<WithDecorator />
-		<WithoutDecorator />
 	</div>
 );
 
